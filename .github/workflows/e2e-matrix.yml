@@ -34,17 +34,16 @@ jobs:
     name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
     runs-on: ${{ matrix.os }}
     outputs:
-      os:  ${{ steps.notify_os.outputs.value }}
+      os:  ${{ matrix.os}}
     steps:
       - id: notify_os
         run: |
-          echo ${{ toJson(needs.matrix-job) }}
           echo "::set-output name=value::$(echo ${{ matrix.os }} )"
 
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Install PNPM
         if: ${{ matrix.package_manager == 'pnpm' }}
@@ -82,7 +81,7 @@ jobs:
 
   e2e:
     needs: install
-    runs-on: ${{fromJson(needs.set-matrix.outputs.os)}}
+    runs-on: ${{fromJson(needs.install.outputs.os)}}
     strategy:
       matrix:
         packages:
@@ -109,7 +108,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Run e2e tests
         run: yarn nx run-many --target=e2e --projects="${{ join(matrix.packages) }}" --parallel=1
