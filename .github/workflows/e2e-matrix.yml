@@ -26,7 +26,7 @@ jobs:
             os-name: osx
             os-cache-dir: /tmp/nx-cache
         node_version:
-          - '16'
+          - ['16', '18']
         package_manager:
           - npm
           - yarn
@@ -84,7 +84,7 @@ jobs:
             packages: e2e-dep-graph-client
       fail-fast: false
 
-    name: ${{ matrix.os-name }}/${{ matrix.package_manager }} - ${{ matrix.packages }}
+    name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
