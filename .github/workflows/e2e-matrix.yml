@@ -24,13 +24,13 @@ jobs:
             - os: ubuntu-latest
               os-name: ubuntu
               os-cache-dir: /tmp/nx-cache
-#             - os: macos-latest
-#               os-name: osx
-#               os-cache-dir: /tmp/nx-cache
+            - os: macos-latest
+              os-name: osx
+              os-cache-dir: /tmp/nx-cache
           node_version:
             - '16'
 #             - '18'
-        fail-fast: false
+#         fail-fast: false
     name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
     runs-on: ${{ matrix.os }}
     outputs:
@@ -40,10 +40,10 @@ jobs:
         run: |
           echo "::set-output name=value::$(echo ${{ matrix.os }} )"
 
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 1
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
 #       - name: Install PNPM
 #         if: ${{ matrix.package_manager == 'pnpm' }}
@@ -56,17 +56,17 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
 
-      - name: Yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+#       - name: Yarn cache directory path
+#         id: yarn-cache-dir-path
+#         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Cache yarn
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-
+#       - name: Cache yarn
+#         uses: actions/cache@v2
+#         with:
+#           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+#           key: ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-${{ hashFiles('yarn.lock') }}
+#           restore-keys: |
+#             ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-
 
       - name: Install packages
         run: yarn install --prefer-offline --frozen-lockfile --non-interactive
@@ -105,10 +105,10 @@ jobs:
 
     name:  ${{ matrix.packages }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 1
 
       - name: Run e2e tests
         run: yarn nx run-many --target=e2e --projects="${{ join(matrix.packages) }}" --parallel=1
