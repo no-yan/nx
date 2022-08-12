@@ -18,37 +18,37 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
+          # - macos-latest
         include:
           - os: ubuntu-latest
             os-name: ubuntu
             os-cache-dir: /tmp/nx-cache
-          - os: macos-latest
-            os-name: osx
-            os-cache-dir: /tmp/nx-cache
+          # - os: macos-latest
+          #   os-name: osx
+          #   os-cache-dir: /tmp/nx-cache
         node_version:
           - '16'
         package_manager:
           - npm
           - yarn
-          - pnpm
+          # - pnpm
         packages:
           - e2e-angular-core
-          - e2e-angular-extensions
-          - e2e-nx-run,e2e-nx-misc,e2e-nx-plugin
-          - e2e-jest
-          - e2e-linter
-          - e2e-cypress
-          - e2e-react
-          - e2e-next
-          - e2e-node
-          - e2e-web
-          - e2e-storybook,e2e-storybook-angular
-          - e2e-workspace-create
-          - e2e-react-native
-          # - e2e-detox
-          - e2e-add-nx-to-monorepo
-          - e2e-dep-graph-client
+          # - e2e-angular-extensions
+          # - e2e-nx-run,e2e-nx-misc,e2e-nx-plugin
+          # - e2e-jest
+          # - e2e-linter
+          # - e2e-cypress
+          # - e2e-react
+          # - e2e-next
+          # - e2e-node
+          # - e2e-web
+          # - e2e-storybook,e2e-storybook-angular
+          # - e2e-workspace-create
+          # - e2e-react-native
+          # # - e2e-detox
+          # - e2e-add-nx-to-monorepo
+          # - e2e-dep-graph-client
         exclude:
           # exclude react-native and detox from ubuntu
           - os: ubuntu-latest
