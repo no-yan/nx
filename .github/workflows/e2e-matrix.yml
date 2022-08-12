@@ -29,7 +29,8 @@ jobs:
             os-name: osx
             os-cache-dir: /tmp/nx-cache
         node_version:
-          - [16, 18]
+          - '16'
+          - '18'
         package_manager:
           - npm
           - yarn

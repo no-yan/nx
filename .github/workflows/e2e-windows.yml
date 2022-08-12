@@ -16,7 +16,8 @@ jobs:
     strategy:
       matrix:
         node_version:
-          - [16, 18]
+          - '16'
+          - '18'
         package_manager:
           - npm
         packages:
