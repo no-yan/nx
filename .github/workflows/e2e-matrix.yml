@@ -19,17 +19,17 @@ jobs:
         matrix:
           os:
             - ubuntu-latest
-            - macos-latest
+#             - macos-latest
           include:
             - os: ubuntu-latest
               os-name: ubuntu
               os-cache-dir: /tmp/nx-cache
-            - os: macos-latest
-              os-name: osx
-              os-cache-dir: /tmp/nx-cache
+#             - os: macos-latest
+#               os-name: osx
+#               os-cache-dir: /tmp/nx-cache
           node_version:
             - '16'
-            - '18'
+#             - '18'
         fail-fast: false
     name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
     runs-on: ${{ matrix.os }}
@@ -40,48 +40,48 @@ jobs:
         run: |
           echo "::set-output name=value::$(echo ${{ matrix.os }} )"
 
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 1
 
-      - name: Install PNPM
-        if: ${{ matrix.package_manager == 'pnpm' }}
-        uses: pnpm/action-setup@v2.2.1
-        with:
-          version: 7.1.0
+#       - name: Install PNPM
+#         if: ${{ matrix.package_manager == 'pnpm' }}
+#         uses: pnpm/action-setup@v2.2.1
+#         with:
+#           version: 7.1.0
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v2.4.0
-        with:
-          node-version: ${{ matrix.node_version }}
+#       - name: Use Node.js ${{ matrix.node_version }}
+#         uses: actions/setup-node@v2.4.0
+#         with:
+#           node-version: ${{ matrix.node_version }}
 
-      - name: Yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+#       - name: Yarn cache directory path
+#         id: yarn-cache-dir-path
+#         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - name: Cache yarn
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-
+#       - name: Cache yarn
+#         uses: actions/cache@v2
+#         with:
+#           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+#           key: ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-${{ hashFiles('yarn.lock') }}
+#           restore-keys: |
+#             ${{ matrix.os }}-node-${{ matrix.node_version }}-yarn-
 
-      - name: Install packages
-        run: yarn install --prefer-offline --frozen-lockfile --non-interactive
+#       - name: Install packages
+#         run: yarn install --prefer-offline --frozen-lockfile --non-interactive
 
-      - name: Install applesimutils, reset ios simulators
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: |
-          HOMEBREW_NO_AUTO_UPDATE=1 brew tap wix/brew >/dev/null
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install applesimutils >/dev/null
-          xcrun simctl shutdown all && xcrun simctl erase all
+#       - name: Install applesimutils, reset ios simulators
+#         if: ${{ matrix.os == 'macos-latest' }}
+#         run: |
+#           HOMEBREW_NO_AUTO_UPDATE=1 brew tap wix/brew >/dev/null
+#           HOMEBREW_NO_AUTO_UPDATE=1 brew install applesimutils >/dev/null
+#           xcrun simctl shutdown all && xcrun simctl erase all
 
 
   e2e:
     needs: install
-    runs-on: ${{fromJson(needs.install.outputs.os)}}
+    runs-on: ${{ needs.install.outputs.os }}
     strategy:
       matrix:
         packages:
@@ -103,7 +103,7 @@ jobs:
           - e2e-dep-graph-client
       fail-fast: false
 
-    name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
+    name:  ${{ matrix.packages }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
