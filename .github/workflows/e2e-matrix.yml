@@ -34,8 +34,13 @@ jobs:
     name: ${{ matrix.os-name }}/${{ matrix.node_version }} - ${{ matrix.package_manager }} - ${{ matrix.packages }}
     runs-on: ${{ matrix.os }}
     outputs:
-      os:  ${{ steps.step1.outputs.notify_os }}
+      os:  ${{ steps.notify_os.outputs.value }}
     steps:
+      - id: notify_os
+        run: |
+          echo ${{ toJson(needs.matrix-job) }}
+          echo "::set-output name=value::$(echo ${{ matrix.os }} )"
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -73,9 +78,7 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE=1 brew tap wix/brew >/dev/null
           HOMEBREW_NO_AUTO_UPDATE=1 brew install applesimutils >/dev/null
           xcrun simctl shutdown all && xcrun simctl erase all
-      - id: notify_os
-        run: |
-          echo ${{ toJson(needs.matrix-job) }}
+
 
   e2e:
     needs: install
